@@ -6,68 +6,180 @@
   <title>Todo App</title>
 
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
-      font-family: Arial, sans-serif;
-      background: #f2f4f8;
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      min-height: 100vh;
       padding: 30px 15px;
+      color: #222;
     }
 
     .app {
-      max-width: 420px;
+      max-width: 480px;
       margin: auto;
-      background: white;
+      background: rgba(255, 255, 255, 0.96);
       padding: 24px;
-      border-radius: 18px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+      border-radius: 28px;
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.22);
+      animation: fadeIn 0.5s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     h1 {
       text-align: center;
+      margin-top: 0;
+      margin-bottom: 8px;
+      font-size: 30px;
+      color: #333;
+    }
+
+    .subtitle {
+      text-align: center;
+      margin-bottom: 22px;
+      color: #777;
+      font-size: 14px;
     }
 
     .input-box {
       display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    input[type="text"],
+    input[type="date"] {
+      width: 100%;
+      padding: 13px 14px;
+      border: 1px solid #ddd;
+      border-radius: 14px;
+      font-size: 15px;
+      outline: none;
+      transition: 0.2s;
+      background: #fafafa;
+    }
+
+    input[type="text"]:focus,
+    input[type="date"]:focus {
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.18);
+      background: white;
+    }
+
+    .add-row {
+      display: flex;
       gap: 10px;
     }
 
-    input[type="text"] {
+    .add-row input {
       flex: 1;
-      padding: 12px;
-      border: 1px solid #ccc;
-      border-radius: 10px;
-      font-size: 16px;
     }
 
     button {
-      padding: 12px 16px;
       border: none;
-      border-radius: 10px;
-      background: black;
-      color: white;
-      font-size: 16px;
+      border-radius: 14px;
       cursor: pointer;
+      transition: 0.2s;
+      font-weight: 600;
+    }
+
+    .add-btn {
+      padding: 13px 18px;
+      background: #667eea;
+      color: white;
+      font-size: 15px;
+    }
+
+    .add-btn:hover {
+      background: #5568d9;
+      transform: translateY(-1px);
+    }
+
+    .filters {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+
+    .filter-btn {
+      flex: 1;
+      padding: 10px;
+      background: #f0f0f5;
+      color: #555;
+      font-size: 14px;
+    }
+
+    .filter-btn.active {
+      background: #667eea;
+      color: white;
+    }
+
+    .stats {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 12px;
+      text-align: center;
     }
 
     ul {
       list-style: none;
       padding: 0;
-      margin-top: 20px;
+      margin: 0;
     }
 
     li {
-      background: #f7f7f7;
-      padding: 12px;
-      border-radius: 10px;
-      margin-bottom: 10px;
+      background: #f8f8fb;
+      padding: 14px;
+      border-radius: 18px;
+      margin-bottom: 12px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       gap: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+      transition: 0.2s;
+      animation: popIn 0.25s ease;
+    }
+
+    @keyframes popIn {
+      from {
+        opacity: 0;
+        transform: scale(0.96);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    li:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.09);
+    }
+
+    li.dragging {
+      opacity: 0.5;
+      transform: scale(0.98);
     }
 
     .task-left {
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       gap: 10px;
       flex: 1;
     }
@@ -75,17 +187,71 @@
     .task-checkbox {
       width: 20px;
       height: 20px;
+      margin-top: 3px;
       cursor: pointer;
+      accent-color: #667eea;
+    }
+
+    .task-content {
+      flex: 1;
+    }
+
+    .task-text {
+      font-size: 16px;
+      font-weight: 600;
+      color: #333;
+      word-break: break-word;
     }
 
     li.done .task-text {
       text-decoration: line-through;
-      color: gray;
+      color: #999;
+    }
+
+    .task-meta {
+      margin-top: 6px;
+      font-size: 12px;
+      color: #777;
+      line-height: 1.5;
+    }
+
+    .deadline {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: #eef0ff;
+      color: #5568d9;
+      margin-top: 4px;
+    }
+
+    .deadline.overdue {
+      background: #ffecec;
+      color: #e74c3c;
     }
 
     .delete-btn {
-      background: #e74c3c;
-      padding: 6px 10px;
+      background: #ff5c5c;
+      color: white;
+      padding: 8px 10px;
+      font-size: 13px;
+      border-radius: 12px;
+    }
+
+    .delete-btn:hover {
+      background: #e94343;
+    }
+
+    .drag-handle {
+      color: #aaa;
+      font-size: 18px;
+      cursor: grab;
+      padding: 4px;
+    }
+
+    .empty {
+      text-align: center;
+      color: #999;
+      padding: 25px 10px;
       font-size: 14px;
     }
   </style>
@@ -94,67 +260,177 @@
 <body>
 
   <div class="app">
-    <h1>Việc cần làm</h1>
+    <h1>Todo App</h1>
+    <div class="subtitle">Quản lý việc cần làm mỗi ngày</div>
 
     <div class="input-box">
-      <input type="text" id="taskInput" placeholder="Nhập công việc...">
-      <button onclick="addTask()">Thêm</button>
+      <div class="add-row">
+        <input type="text" id="taskInput" placeholder="Nhập công việc...">
+        <button class="add-btn" onclick="addTask()">Thêm</button>
+      </div>
+
+      <input type="date" id="deadlineInput">
     </div>
+
+    <div class="filters">
+      <button class="filter-btn active" onclick="setFilter('all', this)">Tất cả</button>
+      <button class="filter-btn" onclick="setFilter('active', this)">Chưa xong</button>
+      <button class="filter-btn" onclick="setFilter('done', this)">Đã xong</button>
+    </div>
+
+    <div class="stats" id="stats"></div>
 
     <ul id="taskList"></ul>
   </div>
 
   <script>
     let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+    let currentFilter = "all";
+    let draggedIndex = null;
 
     function saveTasks() {
       localStorage.setItem("tasks", JSON.stringify(tasks));
+    }
+
+    function formatDate(dateString) {
+      if (!dateString) return "";
+      const date = new Date(dateString);
+      return date.toLocaleDateString("vi-VN");
+    }
+
+    function isOverdue(deadline, done) {
+      if (!deadline || done) return false;
+
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      const deadlineDate = new Date(deadline);
+      deadlineDate.setHours(0, 0, 0, 0);
+
+      return deadlineDate < today;
+    }
+
+    function getFilteredTasks() {
+      if (currentFilter === "active") {
+        return tasks.filter(task => !task.done);
+      }
+
+      if (currentFilter === "done") {
+        return tasks.filter(task => task.done);
+      }
+
+      return tasks;
+    }
+
+    function renderStats() {
+      const total = tasks.length;
+      const done = tasks.filter(task => task.done).length;
+      const active = total - done;
+
+      document.getElementById("stats").innerText =
+        `Tổng: ${total} | Chưa xong: ${active} | Đã xong: ${done}`;
     }
 
     function renderTasks() {
       const taskList = document.getElementById("taskList");
       taskList.innerHTML = "";
 
-      tasks.forEach((task, index) => {
+      const filteredTasks = getFilteredTasks();
+
+      if (filteredTasks.length === 0) {
+        taskList.innerHTML = `<div class="empty">Chưa có công việc nào ở mục này.</div>`;
+        renderStats();
+        return;
+      }
+
+      filteredTasks.forEach((task) => {
+        const realIndex = tasks.indexOf(task);
+
         const li = document.createElement("li");
+        li.draggable = true;
 
         if (task.done) {
           li.classList.add("done");
         }
 
+        const overdue = isOverdue(task.deadline, task.done);
+
         li.innerHTML = `
+          <div class="drag-handle">☰</div>
+
           <div class="task-left">
             <input 
               type="checkbox" 
               class="task-checkbox" 
               ${task.done ? "checked" : ""}
-              onchange="toggleTask(${index})"
+              onchange="toggleTask(${realIndex})"
             >
-            <span class="task-text">${task.text}</span>
+
+            <div class="task-content">
+              <div class="task-text">${task.text}</div>
+
+              <div class="task-meta">
+                Ngày tạo: ${formatDate(task.createdAt)}
+
+                ${
+                  task.deadline
+                    ? `<br><span class="deadline ${overdue ? "overdue" : ""}">
+                        Deadline: ${formatDate(task.deadline)}
+                      </span>`
+                    : ""
+                }
+              </div>
+            </div>
           </div>
 
-          <button class="delete-btn" onclick="deleteTask(${index})">Xóa</button>
+          <button class="delete-btn" onclick="deleteTask(${realIndex})">Xóa</button>
         `;
+
+        li.addEventListener("dragstart", () => {
+          draggedIndex = realIndex;
+          li.classList.add("dragging");
+        });
+
+        li.addEventListener("dragend", () => {
+          li.classList.remove("dragging");
+        });
+
+        li.addEventListener("dragover", (e) => {
+          e.preventDefault();
+        });
+
+        li.addEventListener("drop", () => {
+          moveTask(draggedIndex, realIndex);
+        });
 
         taskList.appendChild(li);
       });
+
+      renderStats();
     }
 
     function addTask() {
       const input = document.getElementById("taskInput");
+      const deadlineInput = document.getElementById("deadlineInput");
+
       const text = input.value.trim();
+      const deadline = deadlineInput.value;
 
       if (text === "") {
-        alert("Nhập công việc trước đã!");
+        alert("Nhập công việc trước đã bà ơi!");
         return;
       }
 
       tasks.push({
         text: text,
-        done: false
+        done: false,
+        deadline: deadline,
+        createdAt: new Date().toISOString()
       });
 
       input.value = "";
+      deadlineInput.value = "";
+
       saveTasks();
       renderTasks();
     }
@@ -170,6 +446,33 @@
       saveTasks();
       renderTasks();
     }
+
+    function setFilter(filter, button) {
+      currentFilter = filter;
+
+      const buttons = document.querySelectorAll(".filter-btn");
+      buttons.forEach(btn => btn.classList.remove("active"));
+
+      button.classList.add("active");
+
+      renderTasks();
+    }
+
+    function moveTask(fromIndex, toIndex) {
+      if (fromIndex === toIndex) return;
+
+      const movedTask = tasks.splice(fromIndex, 1)[0];
+      tasks.splice(toIndex, 0, movedTask);
+
+      saveTasks();
+      renderTasks();
+    }
+
+    document.getElementById("taskInput").addEventListener("keydown", function(event) {
+      if (event.key === "Enter") {
+        addTask();
+      }
+    });
 
     renderTasks();
   </script>
