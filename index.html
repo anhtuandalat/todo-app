@@ -276,9 +276,9 @@
         <button class="add-btn" onclick="addTask()">Thêm</button>
       </div>
 
-      <div class="date-row">
-  <span class="date-label">Deadline</span>
-  <input type="date" id="deadlineInput">
+<div class="date-wrapper">
+  <span class="date-placeholder" id="datePlaceholder">Deadline</span>
+  <input type="date" id="deadlineInput" onchange="toggleDatePlaceholder()">
 </div>
     </div>
 
