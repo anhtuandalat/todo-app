@@ -62,11 +62,12 @@
   font-size: 13px;
 }
     .input-box {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      margin-bottom: 18px;
-    }
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 18px;
+  width: 100%;
+}
 
    input[type="text"] {
   width: 100%;
@@ -88,10 +89,13 @@ input[type="text"]:focus {
 .date-wrapper {
   position: relative;
   width: 100%;
+  max-width: 100%;
 }
 
 .date-wrapper input[type="date"] {
   width: 100%;
+  max-width: 100%;
+  display: block;
   padding: 13px 14px;
   border: 1px solid #ddd;
   border-radius: 14px;
@@ -321,6 +325,24 @@ input[type="text"]:focus {
       padding: 25px 10px;
       font-size: 14px;
     }
+    @media (max-width: 520px) {
+  .app {
+    width: 100%;
+    padding: 22px;
+  }
+
+  .add-row {
+    width: 100%;
+  }
+
+  .date-wrapper {
+    width: 100%;
+  }
+
+  .date-wrapper input[type="date"] {
+    width: 100%;
+  }
+}
   </style>
 </head>
 
