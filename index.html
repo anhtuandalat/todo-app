@@ -99,11 +99,6 @@ input[type="text"]:focus {
   outline: none;
   transition: 0.2s;
   background: #fafafa;
-  color: transparent;
-}
-
-.date-wrapper input[type="date"]:focus,
-.date-wrapper input[type="date"]:valid {
   color: #333;
 }
 
@@ -121,7 +116,36 @@ input[type="text"]:focus {
   color: #aaa;
   font-size: 15px;
   pointer-events: none;
-  background: transparent;
+  z-index: 2;
+}
+
+.date-placeholder.hidden {
+  display: none;
+}
+
+/* Ẩn chữ ngày mặc định khi chưa chọn ngày */
+.date-input.empty {
+  color: transparent;
+}
+
+.date-input.empty::-webkit-datetime-edit {
+  color: transparent;
+}
+
+.date-input.empty::-webkit-datetime-edit-text {
+  color: transparent;
+}
+
+.date-input.empty::-webkit-datetime-edit-day-field {
+  color: transparent;
+}
+
+.date-input.empty::-webkit-datetime-edit-month-field {
+  color: transparent;
+}
+
+.date-input.empty::-webkit-datetime-edit-year-field {
+  color: transparent;
 }
 
     .add-row {
@@ -314,8 +338,13 @@ input[type="text"]:focus {
       </div>
 
 <div class="date-wrapper">
-  <span class="date-placeholder" id="datePlaceholder">Deadline</span>
-  <input type="date" id="deadlineInput" onchange="toggleDatePlaceholder()">
+  <span class="date-placeholder" id="datePlaceholder">Date to Deadline</span>
+  <input 
+    type="date" 
+    id="deadlineInput" 
+    class="date-input empty"
+    onchange="toggleDatePlaceholder()"
+  >
 </div>
     </div>
 
@@ -526,9 +555,11 @@ function toggleDatePlaceholder() {
   const placeholder = document.getElementById("datePlaceholder");
 
   if (deadlineInput.value) {
-    placeholder.style.display = "none";
+    placeholder.classList.add("hidden");
+    deadlineInput.classList.remove("empty");
   } else {
-    placeholder.style.display = "block";
+    placeholder.classList.remove("hidden");
+    deadlineInput.classList.add("empty");
   }
 }
 
