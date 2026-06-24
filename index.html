@@ -362,6 +362,17 @@ input[type="text"]:focus {
   75% { transform: rotate(6deg); }
   100% { transform: rotate(0deg); }
 }
+    .task-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.status-img {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
   </style>
 </head>
 
@@ -475,35 +486,43 @@ input[type="text"]:focus {
         const overdue = isOverdue(task.deadline, task.done);
 
         li.innerHTML = `
-          <div class="drag-handle">☰</div>
+  <div class="drag-handle">☰</div>
 
-          <div class="task-left">
-            <input 
-              type="checkbox" 
-              class="task-checkbox" 
-              ${task.done ? "checked" : ""}
-              onchange="toggleTask(${realIndex})"
-            >
+  <div class="task-left">
+    <input 
+      type="checkbox" 
+      class="task-checkbox" 
+      ${task.done ? "checked" : ""}
+      onchange="toggleTask(${realIndex})"
+    >
 
-            <div class="task-content">
-              <div class="task-text">${task.text}</div>
+    <div class="task-content">
+      <div class="task-text">${task.text}</div>
 
-              <div class="task-meta">
-                Ngày tạo: ${formatDate(task.createdAt)}
+      <div class="task-meta">
+        Ngày tạo: ${formatDate(task.createdAt)}
 
-                ${
-                  task.deadline
-                    ? `<br><span class="deadline ${overdue ? "overdue" : ""}">
-                        Deadline: ${formatDate(task.deadline)}
-                      </span>`
-                    : ""
-                }
-              </div>
-            </div>
-          </div>
+        ${
+          task.deadline
+            ? `<br><span class="deadline ${overdue ? "overdue" : ""}">
+                Deadline: ${formatDate(task.deadline)}
+              </span>`
+            : ""
+        }
+      </div>
+    </div>
+  </div>
 
-          <button class="delete-btn" onclick="deleteTask(${realIndex})">Xóa</button>
-        `;
+  <div class="task-actions">
+    <img 
+      class="status-img" 
+      src="${task.done ? 'done.png' : 'notdone.png'}" 
+      alt="Trạng thái"
+    >
+
+    <button class="delete-btn" onclick="deleteTask(${realIndex})">Xóa</button>
+  </div>
+`;
 
         li.addEventListener("dragstart", () => {
           draggedIndex = realIndex;
