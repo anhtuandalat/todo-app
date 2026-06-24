@@ -27,6 +27,7 @@
       border-radius: 28px;
       box-shadow: 0 20px 45px rgba(0, 0, 0, 0.22);
       animation: fadeIn 0.5s ease;
+      position: relative;
     }
 
     @keyframes fadeIn {
@@ -343,12 +344,32 @@ input[type="text"]:focus {
     width: 100%;
   }
 }
+    .cat-corner {
+  position: absolute;
+  top: 18px;
+  right: 20px;
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 50%;
+  animation: catWiggle 2s ease-in-out infinite;
+}
+
+@keyframes catWiggle {
+  0% { transform: rotate(0deg); }
+  25% { transform: rotate(-6deg); }
+  50% { transform: rotate(0deg); }
+  75% { transform: rotate(6deg); }
+  100% { transform: rotate(0deg); }
+}
   </style>
 </head>
 
 <body>
 
   <div class="app">
+    <img class="cat-corner" src="mèo.jpg" alt="Mèo">
+    
     <h1>To-do App</h1>
     <div class="subtitle">Quản lý việc cần làm mỗi ngày</div>
     <div class="small-subtitle">by HLAT</div>
